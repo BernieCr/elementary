@@ -1,0 +1,46 @@
+
+
+$elementQueryData: '' !global;
+
+/*var eqd = [ {
+        element: 's-module-test',
+        query: 'max-width: 300px',
+        className: 's-module-test--is-small'
+      }
+ ];*/
+
+
+@mixin element-breakpoint($className, $query) {
+  $selector: &;
+  $currentElementQuery : '{"element":"#{$selector}","query":"#{$query}","className":"#{$className}"}';
+
+  @if $elementQueryData == '' {
+    $elementQueryData: "#{$currentElementQuery}" !global;
+  }
+  @else {
+    $elementQueryData: "#{$elementQueryData},#{$currentElementQuery}" !global;
+  }
+
+  /* Element Breakpoint: add class '#{$className}' to #{$selector} if '#{$query}' applies */
+}
+
+@mixin elements-breakpoint-output() {
+  @at-root #eqtestdiv:after {
+    /* Info Info Info Element Breakpoints */
+    content: "[#{$elementQueryData}]"; /* JSON */
+    display: none !important;
+  }
+}
+
+
+.s-module-test {
+  @include element-breakpoint('s-module-test--is-small', 'max-width: 300px');
+  @include element-breakpoint('s-module-test--is-medium', '(min-width: 301px) and (max-width: 599px)');
+  @include element-breakpoint('s-module-test--is-large', 'min-width: 600px');
+
+  display: block;
+}
+
+
+@include elements-breakpoint-output();
+

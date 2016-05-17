@@ -1,0 +1,74 @@
+
+
+$elementQueryMap: () !global;
+
+$elementQueryBridgeId: '#element-query-content-bridge';
+
+
+@mixin element-query($className, $query) {
+  $selectorItem: &;
+  $selector: "#{$selectorItem}";
+
+  @if $className == '' {
+    $className: '*'; // default
+  }
+
+  $mapItem: ($className: $query);
+
+  @if map-has-key($elementQueryMap, $selector) {
+    $existingMap: map_get($elementQueryMap, $selector);
+    $newMap: map_merge($existingMap, $mapItem);
+    $newMapTop: ($selector: $newMap);
+
+    $elementQueryMap: map_remove($elementQueryMap, $selector) !global;
+    $elementQueryMap: map_merge($elementQueryMap, $newMapTop) !global;
+  }
+  @else {
+    $newMap: ($selector: $mapItem);
+    $elementQueryMap: map_merge($elementQueryMap, $newMap) !global;
+  }
+
+  @if $className != '*' {
+    /* Element Query: add class '#{$className}' to #{$selector} if '#{$query}' applies */
+  }
+  @else { // default
+    /* Element Query: Default is '#{$query}' (no class added) */
+  }
+}
+
+
+@mixin element-query-default($query) {
+  @include element-query('*', $query);
+}
+
+@mixin element-query-write-data() {
+
+  $mapContent: "";
+  @each $selector, $items in $elementQueryMap {
+
+    $subContent: "";
+    @each $className, $query in $items {
+      @if $subContent != "" {
+        $subContent: $subContent + ",";
+      }
+      $subContent: quote($subContent + "\""+$className +"\":\"" + $query + "\"");
+    }
+
+    @if $mapContent != "" {
+      $mapContent: $mapContent + ",";
+    }
+    $mapContent: quote($mapContent + "\"" + $selector + "\":{" + $subContent + "}");
+  }
+
+  @at-root #{$elementQueryBridgeId} {
+    &:after {
+      /* Info Info Info Element Queries */
+      content: "{" + $mapContent + "}"; /* JSON */
+    }
+    &, &:before, &:after {
+      display: none !important;
+    }
+  }
+}
+
+

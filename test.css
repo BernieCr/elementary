@@ -1,0 +1,18 @@
+/*var eqd = [ {
+        element: 's-module-test',
+        query: 'max-width: 300px',
+        className: 's-module-test--is-small'
+      }
+ ];*/
+.s-module-test {
+  /* Element Breakpoint: add class 's-module-test--is-small' to .s-module-test if 'max-width: 300px' applies */
+  /* Element Breakpoint: add class 's-module-test--is-medium' to .s-module-test if '(min-width: 301px) and (max-width: 599px)' applies */
+  /* Element Breakpoint: add class 's-module-test--is-large' to .s-module-test if 'min-width: 600px' applies */
+  display: block; }
+
+#eqtestdiv:after {
+  /* Info Info Info Element Breakpoints */
+  content: '[{"element":".s-module-test","query":"max-width: 300px","className":"s-module-test--is-small"},{"element":".s-module-test","query":"(min-width: 301px) and (max-width: 599px)","className":"s-module-test--is-medium"},{"element":".s-module-test","query":"min-width: 600px","className":"s-module-test--is-large"}]';
+  /* JSON */
+  display: none !important; }
+
